@@ -18,14 +18,16 @@
 # limitations under the License.
 #
 
-define :pear_module, :module => nil, :enable => true do
+define :pear_module, :enable => true do
   
   include_recipe "php::pear"
   
   if params[:enable]
-    execute "/usr/bin/pear install -a #{params[:module]}" do
-      only_if "/bin/sh -c '! /usr/bin/pear info #{params[:module]} 2>&1 1>/dev/null"
+    execute "pear-install-#{params[:name]}" do
+      command "/usr/bin/pear install -a #{params[:name]}"
+      only_if do
+        "/bin/sh -c '! /usr/bin/pear info #{params[:name]} 2>&1 1>/dev/null"
+      end
     end
   end
-  
 end
